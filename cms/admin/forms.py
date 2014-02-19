@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from cms.apphook_pool import apphook_pool
-from cms.compat import get_user_model, UserCreationForm
+from cms.compat import get_user_model, get_user_creation_form
 from cms.forms.widgets import UserSelectAdminWidget
 from cms.models import Page, PagePermission, PageUser, ACCESS_PAGE, PageUserGroup, titlemodels
 from cms.utils.conf import get_cms_setting
@@ -420,7 +420,7 @@ class GenericCmsPermissionForm(forms.ModelForm):
         return initials
 
 
-class PageUserForm(UserCreationForm, GenericCmsPermissionForm):
+class PageUserForm(get_user_creation_form(), GenericCmsPermissionForm):
     notify_user = forms.BooleanField(label=_('Notify user'), required=False,
                                      help_text=_(
                                          'Send email notification to user about username or password change. Requires user email.'))
@@ -483,7 +483,7 @@ class PageUserForm(UserCreationForm, GenericCmsPermissionForm):
         """Create user, assign him to staff users, and create permissions for 
         him if required. Also assigns creator to user.
         """
-        Super = self._password_change and PageUserForm or UserCreationForm
+        Super = self._password_change and PageUserForm or get_user_creation_form()
         user = super(Super, self).save(commit=False)
 
         user.is_staff = True

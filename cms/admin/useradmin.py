@@ -8,9 +8,9 @@ from cms.admin.permissionadmin import GenericCmsPermissionAdmin
 from cms.exceptions import NoPermissionsException
 from cms.models import PageUser, PageUserGroup
 from cms.utils.permissions import get_subordinate_users
-from cms.compat import get_user_model, UserAdmin
+from cms.compat import get_user_model, get_user_admin
 
-class PageUserAdmin(UserAdmin, GenericCmsPermissionAdmin):
+class PageUserAdmin(get_user_admin(), GenericCmsPermissionAdmin):
     form = PageUserForm
     add_form = PageUserForm
     model = PageUser
